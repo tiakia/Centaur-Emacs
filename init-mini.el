@@ -110,7 +110,8 @@
 (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
 ;; Keybindings
-(global-set-key (kbd "C-.") #'imenu)
+;;(global-set-key (kbd "C-.") #'imenu)
+
 (global-set-key (kbd "<C-return>") #'rectangle-mark-mode)
 
 (defun revert-current-buffer ()

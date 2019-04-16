@@ -105,7 +105,7 @@
       (tide-setup)
       (eldoc-mode 1)
       (tide-hl-identifier-mode 1))
-    :hook (((typescript-mode js2-mode) . setup-tide-mode)
+    :hook (((typescript-mode js2-mode web-mode js2-jsx-mode) . setup-tide-mode)
            (before-save . tide-format-before-save))
     :config
     (setq tide-format-options
@@ -120,7 +120,7 @@
 ;; Major mode for editing web templates
 (use-package web-mode
   :defines company-backends
-  :mode "\\.\\(phtml\\|php|[gj]sp\\|as[cp]x\\|erb\\|djhtml\\|html?\\|hbs\\|ejs\\|jade\\|swig\\|tm?pl\\|vue\\)$"
+  :mode "\\.\\(phtml\\|php|[gj]sp\\|as[cp]x\\|erb\\|djhtml\\|html?\\|hbs\\|ejs\\|jade\\|swig\\|tm?pl\\|vue\\|tsx?\\)$"
   :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)

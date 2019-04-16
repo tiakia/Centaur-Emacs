@@ -245,7 +245,7 @@
 ;; Framework for mode-specific buffer indexes
 (use-package imenu
   :ensure nil
-  :bind (("C-." . imenu)))
+  :bind (("C-c ." . imenu)))
 
 ;; Move to the beginning/end of line or code
 (use-package mwim

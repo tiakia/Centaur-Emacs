@@ -1,0 +1,165 @@
+;;; custom.el --- user customization file    -*- no-byte-compile: t -*-
+;;; Commentary:
+;;;       Copy custom-template.el to custom.el and change the configurations, then restart Emacs.
+;;;       Put your own configurations in custom-post.el to override default configurations.
+;;; Code:
+
+;; (setq centaur-logo nil)                        ; Logo file or nil (official logo)
+(setq centaur-full-name "tiankai")           ; User full name
+(setq centaur-mail-address "tiankai0426@sina.com")   ; Email address
+;; (setq centaur-proxy "127.0.0.1:1080")          ; Network proxy
+;; (setq centaur-package-archives 'emacs-china)   ; Package repo: melpa, melpa-mirror, emacs-china netease or tuna
+(setq centaur-theme 'classic)                  ; Color theme: default, classic, doom, dark, light or daylight
+;; (setq centaur-dashboard nil)                   ; Use dashboard at startup or not: t or nil
+;; (setq centaur-lsp nil)                         ; Set LSP client: lsp-mode, eglot or nil
+;; (setq centaur-benchmark t)                     ; Enable initialization benchmark or not: t or nil
+
+;; For Emacs devel
+;; (setq package-user-dir (locate-user-emacs-file (format "elpa-%s" emacs-major-version)))
+;; (setq desktop-base-file-name (format ".emacs-%s.desktop" emacs-major-version))
+;; (setq desktop-base-lock-name (format ".emacs-%s.desktop.lock" emacs-major-version))
+
+
+;; doom-modeline
+(setq doom-modeline-buffer-file-name-style 'buffer-name)
+;; mode-line 是否显示文件大小 eg: 98k
+(setq size-indication-mode nil)
+
+;; Fonts
+(when (display-graphic-p)
+  ;; Set default fonts
+  (cond
+   ((member "Source Code Pro" (font-family-list))
+    (set-face-attribute 'default nil :font "Source Code Pro"))
+   ((member "Menlo" (font-family-list))
+    (set-face-attribute 'default nil :font "Menlo"))
+   ((member "Monaco" (font-family-list))
+    (set-face-attribute 'default nil :font "Monaco"))
+   ((member "DejaVu Sans Mono" (font-family-list))
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono"))
+   ((member "Consolas" (font-family-list))
+    (set-face-attribute 'default nil :font "Consolas")))
+
+  (cond
+   (sys/mac-x-p
+    (set-face-attribute 'default nil :height 130))
+   (sys/win32p
+    (set-face-attribute 'default nil :height 110)))
+
+  ;; Specify fonts for all unicode characters
+  (cond
+   ((member "Apple Color Emoji" (font-family-list))
+    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend))
+   ((member "Symbola" (font-family-list))
+    (set-fontset-font t 'unicode "Symbola" nil 'prepend)))
+
+  ;; Specify fonts for Chinese characters
+  (cond
+   ((member "WenQuanYi Micro Hei" (font-family-list))
+    (set-fontset-font t '(#x4e00 . #x9fff) "WenQuanYi Micro Hei"))
+   ((member "Microsoft Yahei" (font-family-list))
+    (set-fontset-font t '(#x4e00 . #x9fff) "Microsoft Yahei")))
+  )
+
+;;设置窗口位置为屏幕左上角(0,0)
+(set-frame-position (selected-frame) 0 0)
+
+(set-frame-width (selected-frame) 110)
+(set-frame-height (selected-frame) 33)
+
+;; 设置选择区域快捷键
+(global-set-key (kbd "C-.") 'set-mark-command)
+
+;;; ---------------------
+
+;; 设置透明度 start
+(global-set-key [(f10)] 'loop-alpha)
+(setq alpha-list '((100 100) (95 65) (85 55) (75 45) (65 35)))
+(defun loop-alpha ()
+  "Be transparent until a key stroke."
+  (interactive)
+  (let ((h (car alpha-list)))                ;; head value will set to
+    ((lambda (a ab)
+       (set-frame-parameter (selected-frame) 'alpha (list a ab))
+       (add-to-list 'default-frame-alist (cons 'alpha (list a ab)))
+       ) (car h) (car (cdr h)))
+
+    (setq alpha-list (cdr (append alpha-list (list h))))
+    )
+  )
+;; 设置透明度 end
+
+(require 'web-mode)
+
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx?\\'" . web-mode))
+
+;;; init-web-mode.el ends here
+
+;;; init-windows
+;; Make "C-x o" prompt for a target window when there are more than 2
+(require-package 'switch-window)
+(setq-default switch-window-shortcut-style 'alphabet)
+(setq-default switch-window-timeout nil)
+(global-set-key (kbd "C-x o") 'switch-window)
+
+
+;;----------------------------------------------------------------------------
+;; When splitting window, show (other-buffer) in the new window
+;;----------------------------------------------------------------------------
+(defun split-window-func-with-other-buffer (split-function)
+  (lambda (&optional arg)
+    "Split this window and switch to the new window unless ARG is provided."
+    (interactive "P")
+    (funcall split-function)
+    (let ((target-window (next-window)))
+      (set-window-buffer target-window (other-buffer))
+      (unless arg
+        (select-window target-window)))))
+
+(global-set-key (kbd "C-x 2") (split-window-func-with-other-buffer 'split-window-vertically))
+(global-set-key (kbd "C-x 3") (split-window-func-with-other-buffer 'split-window-horizontally))
+
+;;; init-windows ends here
+
+
+;; Misc.
+;; (setq confirm-kill-emacs 'y-or-n-p)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files nil))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(all-the-icons-dired-dir-face ((t (:foreground nil))))
+ '(all-the-icons-dsilver ((((background dark)) :foreground "#838484") (((background light)) :foreground "#838484")))
+ '(all-the-icons-lsilver ((((background dark)) :foreground "#B9B6AA") (((background light)) :foreground "#7F7869")))
+ '(all-the-icons-silver ((((background dark)) :foreground "#716E68") (((background light)) :foreground "#716E68")))
+ '(aw-leading-char-face ((t (:inherit error :bold t :height 1.1))))
+ '(aw-mode-line-face ((t (:inherit mode-line-emphasis :bold t))))
+ '(diff-hl-change ((t (:background "#46D9FF"))))
+ '(diff-hl-delete ((t (:background "#ff6c6b"))))
+ '(diff-hl-insert ((t (:background "#98be65"))))
+ '(git-timemachine-minibuffer-author-face ((t (:inherit font-lock-string-face))))
+ '(git-timemachine-minibuffer-detail-face ((t (:inherit warning))))
+ '(hl-todo ((t (:box t :inherit))))
+ '(linum-highlight-face ((t (\` (:inherit default :background nil :foreground nil)))))
+ '(lsp-ui-doc-background ((t (:background nil))))
+ '(lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic))))))
+
+;;; custom.el ends here

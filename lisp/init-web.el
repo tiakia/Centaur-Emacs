@@ -120,7 +120,7 @@
 ;; Major mode for editing web templates
 (use-package web-mode
   :defines company-backends
-  :mode "\\.\\(phtml\\|php|[gj]sp\\|as[cp]x\\|erb\\|djhtml\\|html?\\|hbs\\|ejs\\|jade\\|swig\\|tm?pl\\|vue\\|tsx?\\)$"
+  :mode "\\.\\(phtml\\|php|[gj]sp\\|as[cp]x\\|erb\\|djhtml\\|html?\\|hbs\\|ejs\\|jade\\|swig\\|tm?pl\\|vue\\|tsx?\\|jsx?\\)$"
   :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
@@ -166,6 +166,14 @@
   :config
   ;; Set indent size to 2
   (setq web-beautify-args '("-s" "2" "-f" "-")))
+
+;; prettier code
+(require 'prettier-js)
+
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
+
+
 
 (use-package haml-mode)
 (use-package php-mode)

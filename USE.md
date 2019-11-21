@@ -6,4 +6,5 @@
 - `C-F12`日历
 - `F2` dashboard
 - `C-c c s` coursel-ag 全局搜索模块
-- `C-` t` 代码折叠 
+- `C-` t` 代码折叠
+- `C-c 0` 关闭当前窗口   

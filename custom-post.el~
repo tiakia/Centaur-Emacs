@@ -1,0 +1,29 @@
+;;; custom-post.el --- user customization file    -*- no-byte-compile: t -*-
+;;; Commentary:
+;;;       Copy custom-template.el to custom.el and change the configurations, then restart Emacs.
+;;;       Put your own configurations in custom-post.el to override default configurations.
+;;; Code:
+
+;;; -----------------------
+
+;; 设置窗口位置为屏幕左上角(0,0)
+;; 设置选择区域快捷键
+;; 设置透明度 start
+;; prettier-js
+;; tide typescript
+;; web-mode
+;; init-window
+
+;;; -----------------------
+
+;; prettier code
+;; (use-package prettier-js
+;;   :init
+;;   (add-hook 'js2-mode-hook 'prettier-js-mode)
+;;   (add-hook 'web-mode-hook 'prettier-js-mode)
+;;   (add-hook 'js2-jsx-mode-hook 'prettier-js-mode))
+
+;;; ---------------------
+
+
+;;; custom-post.el ends here
